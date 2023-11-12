@@ -74,17 +74,11 @@ def main():
             assert len(e.found) == 1
             np = e.found[0]
 
-            while True:
-                nb_size = target - np.addr
-                if nb_size <= 0:
-                    break
-                np = p.factory.successors(np, size=nb_size).flat_successors[0]
+            nb_size = target - np.addr
             assert nb_size == 0
 
-            al = np.regs.eax[7:0]
-            dl = np.regs.edx[7:0]
-            al_val = al._model_concrete.value
-            dl_val = dl._model_concrete.value
+            al_val = np.regs.al.concrete_value
+            dl_val = np.regs.dl.concrete_value
 
             if al_val == dl_val:
                 flag_arr.append(ord(trychar))
