@@ -4,8 +4,6 @@ import angr
 import logging
 import subprocess
 
-from claripy.backends.backend_smtlib_solvers import z3str_popen  # pylint:disable=unused-import
-
 self_dir = os.path.dirname(os.path.realpath(__file__))
 
 def test_java_crackme1():
