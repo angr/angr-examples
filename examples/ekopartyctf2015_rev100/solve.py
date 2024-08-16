@@ -1,29 +1,30 @@
-
 # This challenge is super big, and it's impossible to solve with IDA alone.
-# However, we are sure that most of the code is just garbage - you can't have 
-# a 100-point challenge with that much non-garbage code. Therefore the idea is 
-# to use GDB along with hardware breakpoints to find out where each byte is 
-# verified, and then run that single part of code inside angr to solve the 
+# However, we are sure that most of the code is just garbage - you can't have
+# a 100-point challenge with that much non-garbage code. Therefore the idea is
+# to use GDB along with hardware breakpoints to find out where each byte is
+# verified, and then run that single part of code inside angr to solve the
 # password.
 
-from angr.procedures.stubs.UserHook import UserHook
 import angr
+import claripy
+from angr.procedures.stubs.UserHook import UserHook
+
 
 def prepare_state(state, known_passwords):
     state = state.copy()
     password = [ ]
     for i in range(0, len(known_passwords) + 1):
-        password.append(state.solver.BVS('password_%d' % i, 8))
+        password.append(claripy.BVS('password_%d' % i, 8))
         state.memory.store(0xd0000000 + i, password[-1])
 
     for i, char in enumerate(known_passwords):
         state.add_constraints(password[i] == ord(char))
-    state.memory.store(0x6a3b7c, state.solver.BVV(0, 32))
-    state.memory.store(0x6a3b80, state.solver.BVV(0, 32))
+    state.memory.store(0x6a3b7c, claripy.BVV(0, 32))
+    state.memory.store(0x6a3b80, claripy.BVV(0, 32))
 
     state.regs.rbp = 0xffffffff00000000
-    state.memory.store(state.regs.rbp-0x148, state.solver.BVV(0xd0000100, 64), endness=state.arch.memory_endness)
-    state.memory.store(state.regs.rbp-0x140, state.solver.BVV(0xd0000100, 64), endness=state.arch.memory_endness)
+    state.memory.store(state.regs.rbp-0x148, claripy.BVV(0xd0000100, 64), endness=state.arch.memory_endness)
+    state.memory.store(state.regs.rbp-0x140, claripy.BVV(0xd0000100, 64), endness=state.arch.memory_endness)
 
     return state, password
 

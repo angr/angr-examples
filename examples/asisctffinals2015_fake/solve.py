@@ -1,11 +1,13 @@
-import angr
 import binascii
+
+import angr
+import claripy
 
 def main():
     p = angr.Project("fake", auto_load_libs=False)
 
     state = p.factory.blank_state(addr=0x4004AC)
-    inp = state.solver.BVS('inp', 8*8)
+    inp = claripy.BVS('inp', 8*8)
     state.regs.rax = inp
 
     simgr= p.factory.simulation_manager(state)
@@ -23,9 +25,9 @@ def main():
         cond_1 = flag.get_byte(i) <= ord('9')
         cond_2 = flag.get_byte(i) >= ord('a')
         cond_3 = flag.get_byte(i) <= ord('f')
-        cond_4 = found.solver.And(cond_0, cond_1)
-        cond_5 = found.solver.And(cond_2, cond_3)
-        found.add_constraints(found.solver.Or(cond_4, cond_5))
+        cond_4 = claripy.And(cond_0, cond_1)
+        cond_5 = claripy.And(cond_2, cond_3)
+        found.add_constraints(claripy.Or(cond_4, cond_5))
 
     # And it ends with a '}'
     found.add_constraints(flag.get_byte(32+5) == ord('}'))

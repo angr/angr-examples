@@ -1,7 +1,8 @@
-
-import os
-import angr
 import logging
+import os
+
+import angr
+import claripy
 
 
 self_dir = os.path.dirname(os.path.realpath(__file__))
@@ -17,7 +18,7 @@ def test_java_simple3():
     state = simgr.deadended[0]
     # simple3.jar return the character after the inserted one
     # we constrain stdout to "c" and we expected stdin to be "b"
-    state.add_constraints(state.posix.stdout.content[0][0] == state.solver.BVV(ord(b"c"), 8))
+    state.add_constraints(state.posix.stdout.content[0][0] == claripy.BVV(ord(b"c"), 8))
     assert state.posix.stdin.concretize() == [b"b"]
 
 

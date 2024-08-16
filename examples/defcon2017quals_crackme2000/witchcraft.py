@@ -1,10 +1,10 @@
-
 import logging
 import sys
 
-l = logging.getLogger('angr.manager').setLevel(logging.DEBUG)
-
 import angr
+import claripy
+
+l = logging.getLogger('angr.manager').setLevel(logging.DEBUG)
 
 pos = 0xd000000
 
@@ -21,7 +21,7 @@ def recvuntil(sock, s):
 
 class Alloca(angr.SimProcedure):
     def run(self):
-        return self.state.solver.BVV(pos, 64)
+        return claripy.BVV(pos, 64)
 
 def solve(s):
     p = angr.Project("witchcraft_dist/%s" % s,

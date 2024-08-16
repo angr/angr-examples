@@ -27,7 +27,7 @@ BUF_LEN = 100
 
 def char(state, c):
     '''returns constraints s.t. c is printable'''
-    return state.solver.And(c <= '~', c >= ' ')
+    return claripy.And(c <= '~', c >= ' ')
 
 def main():
     p = angr.Project('FUck_binary', auto_load_libs=False)

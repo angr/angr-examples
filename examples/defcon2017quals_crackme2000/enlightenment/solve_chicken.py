@@ -1,9 +1,9 @@
-
 import logging
 import sys
 
 import angr
 import capstone
+import claripy
 import r2pipe
 
 l = logging.getLogger('angr.manager').setLevel(logging.WARNING)
@@ -92,11 +92,11 @@ def solve(s):
 
         state = p.factory.blank_state(addr=check_func.addr, add_options={angr.options.LAZY_SOLVES, angr.options.NO_SYMBOLIC_JUMP_RESOLUTION})
 
-        char = state.solver.BVS("chr", 64)
+        char = claripy.BVS("chr", 64)
 
         # rsi is a2
-        state.regs.rsi = state.solver.BVV(0xd000000, 64)
-        state.memory.store(0xd000000 + 16, state.solver.BVV(0xd000040, 64), endness='Iend_LE')
+        state.regs.rsi = claripy.BVV(0xd000000, 64)
+        state.memory.store(0xd000000 + 16, claripy.BVV(0xd000040, 64), endness='Iend_LE')
         state.memory.store(0xd000040 + 8, char, endness='Iend_LE')
 
         sm = p.factory.simulation_manager(state)

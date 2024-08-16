@@ -11,7 +11,7 @@ class readline_hook(angr.SimProcedure):
 
 class strtol_hook(angr.SimProcedure):
     def run(self, str, end, base):
-        return self.state.solver.BVS("flag", 64, explicit_name=True)
+        return claripy.BVS("flag", 64, explicit_name=True)
 
 def solve_flag_1():
 
@@ -32,7 +32,7 @@ def solve_flag_1():
     state = proj.factory.blank_state(addr=start)
 
     # a symbolic input string with a length up to 128 bytes
-    arg = state.solver.BVS("input_string", 8 * 128)
+    arg = claripy.BVS("input_string", 8 * 128)
 
     # read_line() reads a line from stdin and stores it a this address
     bind_addr = 0x603780
@@ -65,7 +65,7 @@ def solve_flag_2():
     # Sscanf is looking for '%d %d %d %d %d %d' which ends up dropping 6 ints onto the stack
     # We will create 6 symbolic values onto the stack to mimic this
     for i in range(6):
-        state.stack_push(state.solver.BVS('int{}'.format(i), 4*8))
+        state.stack_push(claripy.BVS('int{}'.format(i), 4*8))
 
     # Attempt to find a path to the end of the phase_2 function while avoiding the bomb_explode
     ex = proj.factory.simulation_manager(state)
@@ -147,8 +147,8 @@ def solve_flag_4():
     state = proj.factory.blank_state(addr=start)
 
     # insert variables by ourselves
-    var1 = state.solver.BVS('var1', 8*4)
-    var2 = state.solver.BVS('var2', 8*4)
+    var1 = claripy.BVS('var1', 8*4)
+    var2 = claripy.BVS('var2', 8*4)
     state.memory.store(state.regs.rsp+0x18-0x10, var1, endness='Iend_BE')
     state.memory.store(state.regs.rsp+0x18-0xc, var2, endness='Iend_BE')
 
@@ -165,11 +165,11 @@ def solve_flag_5():
     def is_alnum(state, c):
         # set some constraints on the char, let it
         # be a null char or alphanumeric
-        is_num = state.solver.And(c >= ord("0"), c <= ord("9"))
-        is_alpha_lower = state.solver.And(c >= ord("a"), c <= ord("z"))
-        is_alpha_upper = state.solver.And(c >= ord("A"), c <= ord("Z"))
+        is_num = claripy.And(c >= ord("0"), c <= ord("9"))
+        is_alpha_lower = claripy.And(c >= ord("a"), c <= ord("z"))
+        is_alpha_upper = claripy.And(c >= ord("A"), c <= ord("Z"))
         is_zero = (c == ord('\x00'))
-        isalphanum = state.solver.Or(
+        isalphanum = claripy.Or(
             is_num, is_alpha_lower, is_alpha_upper, is_zero)
         return isalphanum
 
@@ -211,7 +211,7 @@ class read_6_ints(angr.SimProcedure):
     def run(self, s1_addr, int_addr):
         self.int_addrs.append(int_addr)
         for i in range(6):
-            bvs = self.state.solver.BVS("phase6_int_%d" % i, 32)
+            bvs = claripy.BVS("phase6_int_%d" % i, 32)
             self.answer_ints.append(bvs)
             self.state.mem[int_addr].int.array(6)[i] = bvs
 
@@ -264,7 +264,7 @@ def solve_secret():
     sm.explore(find=find, avoid=avoid)
     ### flag found
     found = sm.found[0]
-    flag = found.solver.BVS("flag", 64, explicit_name="True")
+    flag = claripy.BVS("flag", 64, explicit_name="True")
     return str(found.solver.eval(flag))
 
 def main():

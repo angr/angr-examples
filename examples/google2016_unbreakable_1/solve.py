@@ -16,6 +16,7 @@ Team: bitsforeveryone (USMA)
 """
 
 import angr
+import claripy
 
 
 START_ADDR = 0x4005bd # first part of program that does computation
@@ -31,8 +32,8 @@ def extract_memory(state):
 
 def char(state, n):
     """Returns a symbolic BitVector and contrains it to printable chars for a given state."""
-    vec = state.solver.BVS('c{}'.format(n), 8, explicit_name=True)
-    return vec, state.solver.And(vec >= ord(' '), vec <= ord('~'))
+    vec = claripy.BVS('c{}'.format(n), 8, explicit_name=True)
+    return vec, claripy.And(vec >= ord(' '), vec <= ord('~'))
 
 def main():
     p = angr.Project('unbreakable', auto_load_libs=False)
