@@ -11,8 +11,11 @@ The task is simple. Reverse the key generation algorithm to make a working key g
 Provide 100 valid keys in a file named Keys.txt.
 '''
 
-import angr, claripy
 import logging
+
+import angr
+import claripy
+
 logging.getLogger('angr.manager').setLevel(logging.DEBUG)
 
 # Used for troubleshooting

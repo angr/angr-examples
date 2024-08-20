@@ -1,16 +1,17 @@
 ## Full writeup on flag 2 found on http://www.ctfhacker.com
 ## Binary found here: http://csapp.cs.cmu.edu/3e/bomb.tar
-import angr
-import claripy
 import logging
 from struct import unpack
+
+import angr
+import claripy
 
 class readline_hook(angr.SimProcedure):
     def run(self):
         pass
 
 class strtol_hook(angr.SimProcedure):
-    def run(self, str, end, base):
+    def run(self, _str, _end, _base):
         return claripy.BVS("flag", 64, explicit_name=True)
 
 def solve_flag_1():
@@ -124,7 +125,7 @@ def solve_flag_3():
                 iter_sol = found.solver.eval_upto(found.stack_pop(), 10) # ask for up to 10 solutions if possible
                 for sol in iter_sol:
 
-                    if sol == None:
+                    if sol is None:
                         break
 
                     a = sol & 0xffffffff
@@ -168,7 +169,7 @@ def solve_flag_5():
         is_num = claripy.And(c >= ord("0"), c <= ord("9"))
         is_alpha_lower = claripy.And(c >= ord("a"), c <= ord("z"))
         is_alpha_upper = claripy.And(c >= ord("A"), c <= ord("Z"))
-        is_zero = (c == ord('\x00'))
+        is_zero = c == ord('\x00')
         isalphanum = claripy.Or(
             is_num, is_alpha_lower, is_alpha_upper, is_zero)
         return isalphanum

@@ -14,10 +14,10 @@ with one core and 4 GB of RAM, it took ~26 seconds to solve.
 Author: scienceman (@docileninja)
 Team: PPP (CMU)
 """
+import subprocess
 
 import angr
 import claripy
-import subprocess
 
 START = 0x400B30 # start of main
 FIND = 0x403A40 # part of program that prints the flag
@@ -53,7 +53,13 @@ def main():
 
 def test():
     team = main()
-    p = subprocess.Popen(["./FUck_binary"], env={"LD_LIBRARY_PATH": "."}, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(
+        ["./FUck_binary"],
+        env={"LD_LIBRARY_PATH": "."},
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
     out, err = p.communicate(input=team + b"\n")
     assert b"BOOM" in out
 
