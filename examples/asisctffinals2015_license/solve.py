@@ -20,12 +20,12 @@ def main():
     for i in range(5):
         line = [ ]
         for j in range(6):
-            line.append(state.solver.BVS('license_file_byte_%d_%d' % (i, j), 8))
+            line.append(claripy.BVS('license_file_byte_%d_%d' % (i, j), 8))
             state.add_constraints(line[-1] != b'\n')
         if bytestring is None:
             bytestring = claripy.Concat(*line)
         else:
-            bytestring = bytestring.concat(state.solver.BVV(b'\n'), *line)
+            bytestring = bytestring.concat(claripy.BVV(b'\n'), *line)
 
     license_file = angr.storage.file.SimFile(license_name, bytestring)
     state.fs.insert(license_name, license_file)

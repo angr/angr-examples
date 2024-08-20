@@ -1,6 +1,7 @@
 #import logging
 
 import angr
+import claripy
 
 def patch_0(state):
     pass
@@ -14,7 +15,7 @@ def main():
     p.hook(0x402b5d, patch_0, length=0x402b91-0x402b5d)
 
     state = p.factory.blank_state(addr=0x401f30)
-    argv=[b're400.exe', state.solver.BVS('arg1', 37 * 8)]
+    argv=[b're400.exe', claripy.BVS('arg1', 37 * 8)]
 
 
     # Add previous conditions got from debugging the part of code that is patched out

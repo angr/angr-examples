@@ -11,8 +11,11 @@ The task is simple. Reverse the key generation algorithm to make a working key g
 Provide 100 valid keys in a file named Keys.txt.
 '''
 
-import angr, claripy
 import logging
+
+import angr
+import claripy
+
 logging.getLogger('angr.manager').setLevel(logging.DEBUG)
 
 # Used for troubleshooting
@@ -51,10 +54,10 @@ def main():
     # At this point, we've actually found "correct" flags, but they contain symbols that probably aren't on all keyboards. Ideally we only want to find alphanumeric keys.
 
     def is_alphanumeric(state, byte):
-        is_num = state.solver.And(byte >= b"0", byte <= b"9")
-        is_alpha_lower = state.solver.And(byte >= b"a", byte <= b"z")
-        is_alpha_upper = state.solver.And(byte >= b"A", byte <= b"Z")
-        return state.solver.Or(is_num, is_alpha_lower, is_alpha_upper)
+        is_num = claripy.And(byte >= b"0", byte <= b"9")
+        is_alpha_lower = claripy.And(byte >= b"a", byte <= b"z")
+        is_alpha_upper = claripy.And(byte >= b"A", byte <= b"Z")
+        return claripy.Or(is_num, is_alpha_lower, is_alpha_upper)
 
     # XXXX-XX-XXX-XXXX
     for i in list(range(0, 4)) + list(range(5, 7)) + list(range(8, 11)) + list(range(12, 16)):

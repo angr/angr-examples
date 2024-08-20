@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import angr
+import claripy
 
 def main():
     b = angr.Project("very_success", load_options={"auto_load_libs":False})
@@ -8,12 +9,12 @@ def main():
     # remove lazy solves since we don't want to explore unsatisfiable paths
     s = b.factory.blank_state(addr=0x401084)
     # set up the arguments on the stack
-    s.memory.store(s.regs.esp+12, s.solver.BVV(40, s.arch.bits))
+    s.memory.store(s.regs.esp+12, claripy.BVV(40, s.arch.bits))
     s.mem[s.regs.esp+8:].dword = 0x402159
     s.mem[s.regs.esp+4:].dword = 0x4010e4
     s.mem[s.regs.esp:].dword = 0x401064
     # store a symbolic string for the input
-    s.memory.store(0x402159, s.solver.BVS("ans", 8*40))
+    s.memory.store(0x402159, claripy.BVS("ans", 8*40))
     # explore for success state, avoiding failure
     sm = b.factory.simulation_manager(s)
     sm.explore(find=0x40106b, avoid=0x401072)

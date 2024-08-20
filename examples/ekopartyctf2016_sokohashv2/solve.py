@@ -1,7 +1,8 @@
-import angr
-import sys
 import struct
 from itertools import combinations, product
+
+import angr
+import claripy
 
 # http://immunityservices.blogspot.com.ar/2016/11/solving-sokohashv20-full-of-angr-on.html
 
@@ -126,7 +127,7 @@ def main():
         conds = []
         for p in coords:
             conds.append(p == var)
-        init.add_constraints(init.solver.Or(*conds))
+        init.add_constraints(claripy.Or(*conds))
 
     # each coordinate must be distinct
     for v1,v2 in combinations(variables, 2):
@@ -150,7 +151,7 @@ def main():
         expected.append((hex(addr), hex(value)))
     print("Expected is '%s'\n\n" % expected)
 
-    found.add_constraints(init.solver.And(*conds))
+    found.add_constraints(claripy.And(*conds))
 
     result = []
     hash_map = get_hash_map(hash_addr)

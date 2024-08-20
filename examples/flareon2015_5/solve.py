@@ -3,6 +3,7 @@ Full writeup of the walkthrough:
 http://0x0atang.github.io/reversing/2015/09/18/flareon5-concolic.html
 """
 import angr
+import claripy
 
 
 # Globals
@@ -41,7 +42,7 @@ def main():
     # Setup stack to simulate the state after which the "key.txt" is read
     state.regs.esi = LEN_PW
     for i in range(LEN_PW):
-        state.mem[ADDR_PW_ORI+i:].byte = state.solver.BVS('pw', 8)
+        state.mem[ADDR_PW_ORI+i:].byte = claripy.BVS('pw', 8)
 
     # Hook instructions to use a separate buffer for the XOR-ing function
     p.hook(0x401259, hook_duplicate_pw_buf, length=0)

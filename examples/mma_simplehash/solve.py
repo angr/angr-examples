@@ -30,8 +30,10 @@
 # Go go go!
 #
 
-import angr
 import subprocess
+
+import angr
+import claripy
 
 #
 # These are our symbolic summary functions for modular multiplication, modulo,
@@ -43,24 +45,24 @@ class mm(angr.SimProcedure):
         first = high1.concat(low1)
         second = high2.concat(low2)
         result = (first * second) % 1000000000000037
-        self.state.regs.edx = self.state.solver.Extract(63, 32, result)
-        return self.state.solver.Extract(31, 0, result)
+        self.state.regs.edx = claripy.Extract(63, 32, result)
+        return claripy.Extract(31, 0, result)
 
 class moddi3(angr.SimProcedure):
     def run(self, a, a2, b, b2):
         first = a2.concat(a)
         second = b2.concat(b)
         result = first % second
-        self.state.regs.edx = self.state.solver.Extract(63, 32, result)
-        return self.state.solver.Extract(31, 0, result)
+        self.state.regs.edx = claripy.Extract(63, 32, result)
+        return claripy.Extract(31, 0, result)
 
 class isalnum(angr.SimProcedure):
     def run(self, c):
-        is_num = self.state.solver.And(c >= ord("0"), c <= ord("9"))
-        is_alpha_lower = self.state.solver.And(c >= ord("a"), c <= ord("z"))
-        is_alpha_upper = self.state.solver.And(c >= ord("A"), c <= ord("Z"))
-        isalphanum = self.state.solver.Or(is_num, is_alpha_lower, is_alpha_upper)
-        return self.state.solver.If(isalphanum, self.state.solver.BVV(1, self.state.arch.bits), self.state.solver.BVV(0, self.state.arch.bits))
+        is_num = claripy.And(c >= ord("0"), c <= ord("9"))
+        is_alpha_lower = claripy.And(c >= ord("a"), c <= ord("z"))
+        is_alpha_upper = claripy.And(c >= ord("A"), c <= ord("Z"))
+        isalphanum = claripy.Or(is_num, is_alpha_lower, is_alpha_upper)
+        return claripy.If(isalphanum, claripy.BVV(1, self.state.arch.bits), claripy.BVV(0, self.state.arch.bits))
 
 def main():
     # Let's load the file and hook the problem functions to get around issues 3
@@ -82,7 +84,7 @@ def main():
 
     # Since we started execution partway through main(), after the user input was
     # read, we need to manually set the user input.
-    s.memory.store(0x080491A0, s.solver.BVS("ans", 999*8))
+    s.memory.store(0x080491A0, claripy.BVS("ans", 999*8))
 
     # Now, we start the symbolic execution. We create a PathGroup and set up some
     # logging (so that we can see what's happening).

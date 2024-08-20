@@ -1,9 +1,10 @@
+import logging
 import os
 import sys
-import angr
 import subprocess
-import logging
 
+import angr
+import claripy
 from angr import sim_options as so
 
 l = logging.getLogger("insomnihack.simple_aeg")
@@ -88,7 +89,7 @@ def main(binary):
     for buf_addr in find_symbolic_buffer(ep, len(shellcode)):
         l.info("found symbolic buffer at %#x", buf_addr)
         memory = ep.memory.load(buf_addr, len(shellcode))
-        sc_bvv = ep.solver.BVV(shellcode)
+        sc_bvv = claripy.BVV(shellcode)
 
         # check satisfiability of placing shellcode into the address
         if ep.satisfiable(extra_constraints=(memory == sc_bvv,ep.regs.pc == buf_addr)):
