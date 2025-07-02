@@ -3,10 +3,12 @@ import os
 import subprocess
 from unittest import skipIf
 
+import pytest
 from flaky import flaky
 
 
 def slow_test(func):
+    pytest.mark.slow(func)
     func.speed = "slow"
     slow_test_env = (
         os.environ["SKIP_SLOW_TESTS"].lower()
