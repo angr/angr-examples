@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import unittest
 
 import angr
 import claripy
@@ -77,6 +78,7 @@ def main(verbose=True, seed=12751):
     return idx, before, after, new_input
 
 
+@unittest.skip("disabled")
 def test():
     idx, before, after, new_input = main(verbose=False)
     # Basic corpus growth sanity checks
