@@ -17,7 +17,7 @@ Team: PPP (CMU)
 import subprocess
 
 import angr
-import claripy
+from angr import claripy
 
 START = 0x400B30 # start of main
 FIND = 0x403A40 # part of program that prints the flag

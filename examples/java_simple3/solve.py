@@ -2,7 +2,7 @@ import logging
 import os
 
 import angr
-import claripy
+from angr import claripy
 
 
 self_dir = os.path.dirname(os.path.realpath(__file__))

@@ -2,7 +2,7 @@ import logging
 import sys
 
 import angr
-import claripy
+from angr import claripy
 
 l = logging.getLogger('angr.manager').setLevel(logging.DEBUG)
 

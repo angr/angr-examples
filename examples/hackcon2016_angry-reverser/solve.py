@@ -1,5 +1,5 @@
 import angr
-import claripy
+from angr import claripy
 
 # HackCon 2016 - angry-reverser
 # @author: P1kachu, Kyle ZENG

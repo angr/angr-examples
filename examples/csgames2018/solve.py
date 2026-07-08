@@ -14,7 +14,7 @@ Provide 100 valid keys in a file named Keys.txt.
 import logging
 
 import angr
-import claripy
+from angr import claripy
 
 logging.getLogger('angr.manager').setLevel(logging.DEBUG)
 

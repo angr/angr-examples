@@ -4,7 +4,7 @@ import os
 import unittest
 
 import angr
-import claripy
+from angr import claripy
 from angr.rustylib.fuzzer import Fuzzer, InMemoryCorpus, ClientStats
 from angr import sim_options as so
 

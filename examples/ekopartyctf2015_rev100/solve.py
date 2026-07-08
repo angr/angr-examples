@@ -6,7 +6,7 @@
 # password.
 
 import angr
-import claripy
+from angr import claripy
 from angr.procedures.stubs.UserHook import UserHook
 
 

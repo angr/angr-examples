@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import angr
-import claripy
+from angr import claripy
 
 def main():
     b = angr.Project("very_success", load_options={"auto_load_libs":False})

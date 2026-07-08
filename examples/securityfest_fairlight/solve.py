@@ -11,7 +11,7 @@ Simple solution, requires 0 knowledge of the check functions.
 """
 
 import angr
-import claripy
+from angr import claripy
 
 def main():
     proj = angr.Project('./fairlight', load_options={"auto_load_libs": False})

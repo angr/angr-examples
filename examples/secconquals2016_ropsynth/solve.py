@@ -18,7 +18,7 @@ import unittest
 
 import angr
 import angrop #pylint:disable=unused-variable
-import claripy
+from angr import claripy
 
 def make_elf(gadgets):
     """

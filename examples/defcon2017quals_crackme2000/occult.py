@@ -3,7 +3,7 @@ import sys
 
 import angr
 import capstone
-import claripy
+from angr import claripy
 import r2pipe
 
 l = logging.getLogger('angr.manager').setLevel(logging.WARNING)

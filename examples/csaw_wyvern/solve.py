@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 import angr
-import claripy
+from angr import claripy
 import time
 
 def main():

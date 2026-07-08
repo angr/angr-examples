@@ -2,7 +2,7 @@ import struct
 from itertools import combinations, product
 
 import angr
-import claripy
+from angr import claripy
 
 # http://immunityservices.blogspot.com.ar/2016/11/solving-sokohashv20-full-of-angr-on.html
 

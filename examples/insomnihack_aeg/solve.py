@@ -4,7 +4,7 @@ import sys
 import subprocess
 
 import angr
-import claripy
+from angr import claripy
 from angr import sim_options as so
 
 l = logging.getLogger("insomnihack.simple_aeg")

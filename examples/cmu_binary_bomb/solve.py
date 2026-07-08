@@ -4,7 +4,7 @@ import logging
 from struct import unpack
 
 import angr
-import claripy
+from angr import claripy
 
 class readline_hook(angr.SimProcedure):
     def run(self):

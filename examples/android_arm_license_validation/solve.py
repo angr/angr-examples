@@ -9,7 +9,7 @@ https://github.com/OWASP/owasp-mstg/blob/master/Document/0x06a-Reverse-Engineeri
 '''
 
 import angr
-import claripy
+from angr import claripy
 import base64
 
 def main():

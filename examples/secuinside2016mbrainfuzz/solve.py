@@ -9,7 +9,7 @@
 import re
 import sys
 import angr
-import claripy
+from angr import claripy
 import subprocess
 
 

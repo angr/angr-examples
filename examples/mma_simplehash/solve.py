@@ -33,7 +33,7 @@
 import subprocess
 
 import angr
-import claripy
+from angr import claripy
 
 #
 # These are our symbolic summary functions for modular multiplication, modulo,

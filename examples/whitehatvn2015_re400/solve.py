@@ -1,7 +1,7 @@
 #import logging
 
 import angr
-import claripy
+from angr import claripy
 
 def patch_0(state):
     pass

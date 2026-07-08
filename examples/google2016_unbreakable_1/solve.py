@@ -16,7 +16,7 @@ Team: bitsforeveryone (USMA)
 """
 
 import angr
-import claripy
+from angr import claripy
 
 
 START_ADDR = 0x4005bd # first part of program that does computation

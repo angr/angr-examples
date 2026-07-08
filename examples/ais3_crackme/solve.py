@@ -8,7 +8,7 @@ It is an easy crackme challenge. It checks the command line argument.
 '''
 
 import angr
-import claripy
+from angr import claripy
 
 
 def main():

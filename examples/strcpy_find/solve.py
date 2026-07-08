@@ -9,7 +9,7 @@
 '''
 
 import angr
-import claripy  # It is optimal to use claripy.BVV/BVS over state.solver.BVV/BVS
+from angr import claripy  # It is optimal to use claripy.BVV/BVS over state.solver.BVV/BVS
                 # EDITOR'S NOTE: this is somewhat true but it super super does
                 # not matter if you're just creating a few variables for
                 # initialization. do what's convenient. state.solver.BVS will

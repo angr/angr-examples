@@ -8,7 +8,7 @@
 
 import angr
 
-import claripy
+from angr import claripy
 
 def main():
     proj = angr.Project('./unbreakable-enterprise-product-activation', load_options={"auto_load_libs": False}) # Disabling the automatic library loading saves a few milliseconds.

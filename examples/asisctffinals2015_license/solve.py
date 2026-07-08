@@ -1,5 +1,5 @@
 import angr
-import claripy
+from angr import claripy
 
 def main():
     p = angr.Project("license", load_options={'auto_load_libs': False})

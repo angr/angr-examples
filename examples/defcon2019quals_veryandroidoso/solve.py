@@ -4,7 +4,7 @@ import angr
 import os
 from angr.procedures.java import JavaSimProcedure
 from archinfo.arch_soot import SootMethodDescriptor, SootAddressDescriptor
-import claripy
+from angr import claripy
 
 
 class getSecretNumber_sp(JavaSimProcedure):

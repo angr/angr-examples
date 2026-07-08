@@ -12,7 +12,7 @@ import itertools
 import subprocess
 
 import angr
-import claripy
+from angr import claripy
 
 def get_possible_flags():
     # load the binary

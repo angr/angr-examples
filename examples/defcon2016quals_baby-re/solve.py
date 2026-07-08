@@ -10,7 +10,7 @@ from __future__ import print_function
 # Runtime: ~15 seconds (thanks lazy solves!)
 
 import angr
-import claripy
+from angr import claripy
 
 def main():
     proj = angr.Project('./baby-re', auto_load_libs=False)

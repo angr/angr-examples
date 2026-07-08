@@ -1,7 +1,7 @@
 import binascii
 
 import angr
-import claripy
+from angr import claripy
 
 def main():
     p = angr.Project("fake", auto_load_libs=False)

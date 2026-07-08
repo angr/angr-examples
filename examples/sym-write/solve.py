@@ -10,7 +10,7 @@ The purpose of this example is to show how to use symbolic write addresses.
 """
 
 import angr
-import claripy
+from angr import claripy
 
 def main():
 	p = angr.Project('./issue', load_options={"auto_load_libs": False})
