@@ -63,10 +63,10 @@ def solve_flag_2():
     # Start analysis at the phase_2 function after the sscanf
     state = proj.factory.blank_state(addr=0x400f0a)
 
-    # Sscanf is looking for '%d %d %d %d %d %d' which ends up dropping 6 ints onto the stack
-    # We will create 6 symbolic values onto the stack to mimic this
-    for i in range(6):
-        state.stack_push(claripy.BVS('int{}'.format(i), 4*8))
+    # Sscanf is looking for '%d %d %d %d %d %d' which ends up dropping 6 ints onto the stack.
+    # stack_push stores a whole 8-byte word, so push 3 symbolic words of 2 ints each
+    for i in range(3):
+        state.stack_push(claripy.BVS('ints{}'.format(i), 8*8))
 
     # Attempt to find a path to the end of the phase_2 function while avoiding the bomb_explode
     ex = proj.factory.simulation_manager(state)
@@ -183,8 +183,8 @@ def solve_flag_5():
 
     proj.analyses.CFG()
 
-    start = proj.kb.obj.get_symbol('phase_5').rebased_addr
-    avoid = proj.kb.obj.get_symbol('explode_bomb').rebased_addr
+    start = proj.loader.main_object.get_symbol('phase_5').rebased_addr
+    avoid = proj.loader.main_object.get_symbol('explode_bomb').rebased_addr
     # let's stop at the end of the function
     find = proj.kb.functions.get('phase_5').ret_sites[0].addr
 
@@ -265,7 +265,7 @@ def solve_secret():
     sm.explore(find=find, avoid=avoid)
     ### flag found
     found = sm.found[0]
-    flag = claripy.BVS("flag", 64, explicit_name="True")
+    flag = claripy.BVS("flag", 64, explicit_name=True)
     return str(found.solver.eval(flag))
 
 def main():
@@ -294,7 +294,9 @@ def test():
     assert solve_flag_4() == '7 0'
     print("Stage 4 ok!")
 
-    assert solve_flag_5().lower() == 'ionefg'
+    # phase_5 maps each character's low nibble through this table and compares
+    # with "flyers", so several strings defuse it ('ionefg', '9onEFg', ...)
+    assert ''.join("maduiersnfotvbyl"[ord(c) & 0xf] for c in solve_flag_5()) == "flyers"
     print("Stage 5 ok!")
 
     assert solve_flag_6() == '4 3 2 1 6 5'
